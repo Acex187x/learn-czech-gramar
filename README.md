@@ -1,6 +1,7 @@
 # Učíme se pády
 
 This app is a part of Project Glossary which is now in development.
+
 Actual version of the app is hosted on [project-glossary-dev.web.app](https://project-glossary-dev.web.app)
 
 ## Starting app locally
