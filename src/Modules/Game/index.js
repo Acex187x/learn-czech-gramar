@@ -1,107 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { VariantButton, TaskText, DialogText, ActivityIndicator } from '../../VisualComponents';
+import { VariantButton, Title, DialogText, ActivityIndicator } from '../../VisualComponents';
 import getRandomCzechWords from '../../Helpers/getRandomCzechWords';
 import dialogs from '../../Helpers/dialogs';
-import styled from 'styled-components';
+import PADS from './pads.json'
+import { GameContainer, TaskContainer, AnswerContainer, ButtonsContainer, AnswerVisualGap } from './components';
 
-const PADS = [
-    'Nominativu',
-    'Genitivu',
-    'Dativu',
-    'Akkuzativu',
-    'Vocativu',
-    'Lokálu',
-    'Instrumentálu',
-    'Nominativu pl.',
-    'Genitivu pl.',
-    'Dativu pl.',
-    'Akkuzativu pl.',
-    'Vocativu pl.',
-    'Lokálu pl.',
-    'Instrumentálu pl.'
-]
-
-const GameContainer = styled.div`
-    grid-area: 2 / 2 / 2 / 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: transform .5s, opacity .5s;
-    ${p => p.anim === 0 ? `
-        transform: translateY(-50px);
-        opacity: 0;
-    ` : ''}
-
-    ${p => p.anim === 1 ? `
-        transition: unset;
-        transform: translateY(50px);
-        opacity: 0;
-    ` : ''}
-
-    ${p => p.anim === 2 ? `
-        transform: translateY(0);
-        opacity: 1;
-    ` : ''}
-`
-
-const TaskContainer = styled.div`
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    @media only screen 
-		and (min-width: 320px) 
-		and (max-width: 480px) {
-        flex: 2;
-        width: 100%;
-        justify-content: flex-start;
-        align-items: flex-start;
-        padding-top: 5vh;
-	}
-`
-
-const AnswerContainer = styled.div`
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-
-    @media only screen 
-		and (min-width: 320px) 
-		and (max-width: 480px) {
-        padding-bottom: 50px;
-	}
-`
-
-const ButtonsContainer = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-gap: 20px;
-
-    @media only screen 
-		and (min-width: 320px) 
-		and (max-width: 480px) {
-		width: 100%;
-        height: 100%;
-        padding: 20px;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-	}
-`
-
-const AnswerVisualGap = styled.div`
-    width: 8vw;
-    height: 1.5vw;
-    border-bottom: 2px solid white;
-    display: inline-block;
-`
-
-const Game = () => {
+const Game = ({ setCounters, setCountersHidden }) => {
 
     const currentList = useRef(null)
     const preloadedList = useRef(null)
@@ -112,12 +16,13 @@ const Game = () => {
     const [anim, setAnim] = useState(true);
     const [lockButton, setLockButton] = useState(false);
     const [isLoaderTransparent, setIsLoaderTransparent] = useState(true);
-    const [wrongCounter, setWrongCounter] = useState(0);
-    const [correctCounter, setCorrectCounter] = useState(0);
+    // const [wrongCounter, setWrongCounter] = useState(0);
+    // const [correctCounter, setCorrectCounter] = useState(0);
 
     const startLoading = () => {
         setAnim(0);
-        setIsLoaderTransparent(true)
+        setIsLoaderTransparent(true);
+        setCountersHidden(true);
         setTimeout(() => {
             setAnim(2);
             setLoading(true);
@@ -127,7 +32,7 @@ const Game = () => {
 
     const stopLoading = () => {
         setIsLoaderTransparent(true)
-
+        setCountersHidden(false);
         setTimeout(() => {
             setLoading(false);
             setAnim(1);
@@ -185,9 +90,9 @@ const Game = () => {
         const isCorrect = variant === currentWord.correctForm;
 
         if (isCorrect) {
-            setCorrectCounter(cc => cc + 1)
+            setCounters(c => [c[0] + 1, c[1], c[2]])
         } else {
-            setWrongCounter(wc => wc + 1)
+            setCounters(c => [c[0], c[1] + 1, c[2]])
         }
 
         setTimeout(() => {
@@ -231,7 +136,7 @@ const Game = () => {
             {
                 !loading && currentWord &&
                 <TaskContainer>
-                    <TaskText>Dejte {<b>{currentWord.cz}</b>} do <b>{PADS[currentWord.correctFormID]}</b></TaskText>
+                    <Title>Dejte {<b>{currentWord.cz}</b>} do <b>{PADS[currentWord.correctFormID]}</b></Title>
                     <DialogText>
                         – {dialogs[currentWord.correctFormID][0][0]} <br/>
                         – {dialogs[currentWord.correctFormID][0][1].split('{WORD}')[0]}<AnswerVisualGap/> (<b>{currentWord.cz}</b>{currentWord.correctFormID >= 7 ? ' - pl.' : ''}){dialogs[currentWord.correctFormID][0][1].split('{WORD}')[1]}

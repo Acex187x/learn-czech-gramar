@@ -1,6 +1,7 @@
 import VariantButton from './VariantButton';
-import TaskText from './TaskText';
+import Title from './Title';
 import DialogText from './DialogText'
 import ActivityIndicator from './ActivityIndicator'
+import Counters from './Counters'
 
-export { VariantButton, TaskText, DialogText, ActivityIndicator };
+export { VariantButton, Title, DialogText, ActivityIndicator, Counters };

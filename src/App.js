@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import getRandomCzechWords from './Helpers/getRandomCzechWords'
 import styled from 'styled-components';
 import Game from './Modules/Game';
+import StartMenu from './Modules/StartMenu'
+import { Counters } from './VisualComponents'
 
 const AppContainer = styled.div`
 	transition: background 1s;
@@ -23,7 +25,7 @@ const AppContainer = styled.div`
 		and (min-width: 320px) 
 		and (max-width: 480px) {
 		grid-template-columns: 0 1fr 0;
-		grid-template-rows: 0 1fr 0;
+		grid-template-rows: 1fr 8fr 0;
 	}
 
 	/* -webkit-animation: gradient 30s ease infinite;
@@ -49,18 +51,36 @@ const AppContainer = styled.div`
 
 function App() {
 
-	useEffect( () => {
-		if (process.env.NODE_ENV === 'production') {
-			setInterval(() => {
-				console.clear();
-				console.log ( '%c%s', 'color: green; font: 1.2rem/1 Tahoma;', 'Если уж зашел сюда, то просто обязан подписаться на меня в инсте - @my_acex' );
-			}, 5000)
-		}
+	const [counters, setCounters] = useState([0, 0, 0])
+	const [isCountersHidden, setCountersHidden] = useState(true);
+	const [appState, setAppState] = useState('startMenu');
+	const [gameConfig, setConfig] = useState({
+		mode: 'infinite',
+		pads: 'all',
+		timeLimit: false,
+	});
+
+	useEffect(() => {
+		
 	}, [])
 
 	return (
 		<AppContainer>
-			<Game />
+			{
+				appState === 'startMenu' && 
+					<StartMenu setConfig={setConfig} />
+			}
+
+			{
+				appState === 'game' &&
+					<Counters counters={counters} isHidden={isCountersHidden}/>
+			}
+			
+			{
+				appState === 'game' &&
+					<Game setCounters={setCounters} setCountersHidden={setCountersHidden} />
+			}
+			
 		</AppContainer>
 	);
 }

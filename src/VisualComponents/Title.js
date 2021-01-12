@@ -14,7 +14,7 @@ const TextContainer = styled.div`
 	}
 `
 
-const TaskText = (props) => {
+const Title = (props) => {
     return (
         <TextContainer>
             {props.children}
@@ -22,4 +22,4 @@ const TaskText = (props) => {
     );
 };
 
-export default TaskText;
+export default Title;

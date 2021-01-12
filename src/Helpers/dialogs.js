@@ -23,7 +23,7 @@ const dialogs = [
 
 
     [
-        ['Co to tam je?', 'To je {WORD}']
+        ['Co to tam je?', 'To jsou {WORD}']
     ],
     [
         ['Bez čeho nemůžeš žít?', 'Nemůžu žít bez {WORD}!']
